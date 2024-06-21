@@ -1,4 +1,4 @@
-% 1
+% 1 Saber el precio de una cañería
 % precio/2
 precio(codo(_), 5).
 precio(canio(_, Longitud), Precio):- 
@@ -10,6 +10,12 @@ precio(canilla(Tipo,_,Ancho), 12):-
 precio(canilla(Tipo,_,Ancho), 15):- 
     Tipo \= triangular,
     Ancho > 5.
+% Agregado para precios de cañerías.
+precio([], 0).
+precio([Pieza|Piezas], Precio):-
+    precio(Pieza, PrecioPieza),
+    precio(Piezas, PrecioPiezas),
+    Precio is PrecioPieza + PrecioPiezas.
 
 % 2
 % puedoEnchufar/2 con piezas
@@ -34,6 +40,18 @@ color(canilla(_,Color,_), Color).
 coloresEnchufables(Color, Color).
 coloresEnchufables(azul, rojo).
 coloresEnchufables(rojo, negro).
+
+% 4
+/*
+Definir un predicado canieriaBienArmada/1, que nos indique si una cañería está 
+bien armada o no. Una cañería está bien armada si a cada elemento lo puedo
+enchufar al inmediato siguiente, de acuerdo a lo indicado al definir el 
+predicado puedoEnchufar/2.
+*/
+canieriaBienArmada([_]).
+canieriaBienArmada([Pieza1, Pieza2 | Piezas]):-
+    puedoEnchufar(Pieza1, Pieza2),
+    canieriaBienArmada([Pieza2 | Piezas]).
 
 %%%%%%%%%%%%%% TESTS %%%%%%%%%%%%%%
 :- begin_tests(canierias).
